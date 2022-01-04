@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Echouage{% endblock %}
+
+{% block body %}
+    <h1>Echouage</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ echouage.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ echouage.date }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ echouage.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('echouage_index') }}">back to list</a>
+
+    <a href="{{ path('echouage_edit', {'id': echouage.id}) }}">edit</a>
+
+    {{ include('echouage/_delete_form.html.twig') }}
+{% endblock %}

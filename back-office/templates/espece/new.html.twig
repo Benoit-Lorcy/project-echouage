@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Espece{% endblock %}
+
+{% block body %}
+    <h1>Create new Espece</h1>
+
+    {{ include('espece/_form.html.twig') }}
+
+    <a href="{{ path('espece_index') }}">back to list</a>
+{% endblock %}

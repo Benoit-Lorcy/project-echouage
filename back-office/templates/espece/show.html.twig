@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espece{% endblock %}
+
+{% block body %}
+    <h1>Espece</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ espece.id }}</td>
+            </tr>
+            <tr>
+                <th>Espece</th>
+                <td>{{ espece.espece }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('espece_index') }}">back to list</a>
+
+    <a href="{{ path('espece_edit', {'id': espece.id}) }}">edit</a>
+
+    {{ include('espece/_delete_form.html.twig') }}
+{% endblock %}

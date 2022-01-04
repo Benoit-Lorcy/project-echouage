@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Echouage index{% endblock %}
+
+{% block body %}
+    <h1>Echouage index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Nombre</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for echouage in echouages %}
+            <tr>
+                <td>{{ echouage.id }}</td>
+                <td>{{ echouage.date }}</td>
+                <td>{{ echouage.nombre }}</td>
+                <td>
+                    <a href="{{ path('echouage_show', {'id': echouage.id}) }}">show</a>
+                    <a href="{{ path('echouage_edit', {'id': echouage.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('echouage_new') }}">Create new</a>
+{% endblock %}

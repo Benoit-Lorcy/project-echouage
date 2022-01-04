@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>{% block title %}Echouage{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset("header.css") }}">
+        <link rel="stylesheet" href="{{ asset("footer.css") }}">
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </head>
+    <body>
+        <header>{% include "header.html" %}</header>
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
+        <footer>{% include "footer.html" %}</footer>
+    </body>
+</html>

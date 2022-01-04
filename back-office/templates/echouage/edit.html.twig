@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Echouage{% endblock %}
+
+{% block body %}
+    <h1>Edit Echouage</h1>
+
+    {{ include('echouage/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('echouage_index') }}">back to list</a>
+
+    {{ include('echouage/_delete_form.html.twig') }}
+{% endblock %}

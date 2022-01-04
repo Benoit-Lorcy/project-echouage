@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Espece{% endblock %}
+
+{% block body %}
+    <h1>Edit Espece</h1>
+
+    {{ include('espece/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('espece_index') }}">back to list</a>
+
+    {{ include('espece/_delete_form.html.twig') }}
+{% endblock %}
