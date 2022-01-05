@@ -13,13 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/espece")
  */
-class EspeceController extends AbstractController
-{
+class EspeceController extends AbstractController {
     /**
      * @Route("/", name="espece_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): Response
-    {
+    public function index(EntityManagerInterface $entityManager): Response {
         $especes = $entityManager
             ->getRepository(Espece::class)
             ->findAll();
@@ -32,8 +30,7 @@ class EspeceController extends AbstractController
     /**
      * @Route("/new", name="espece_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(Request $request, EntityManagerInterface $entityManager): Response {
         $espece = new Espece();
         $form = $this->createForm(EspeceType::class, $espece);
         $form->handleRequest($request);
@@ -54,8 +51,7 @@ class EspeceController extends AbstractController
     /**
      * @Route("/{id}", name="espece_show", methods={"GET"})
      */
-    public function show(Espece $espece): Response
-    {
+    public function show(Espece $espece): Response {
         return $this->render('espece/show.html.twig', [
             'espece' => $espece,
         ]);
@@ -64,8 +60,7 @@ class EspeceController extends AbstractController
     /**
      * @Route("/{id}/edit", name="espece_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Espece $espece, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(Request $request, Espece $espece, EntityManagerInterface $entityManager): Response {
         $form = $this->createForm(EspeceType::class, $espece);
         $form->handleRequest($request);
 
@@ -84,8 +79,7 @@ class EspeceController extends AbstractController
     /**
      * @Route("/{id}", name="espece_delete", methods={"POST"})
      */
-    public function delete(Request $request, Espece $espece, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(Request $request, Espece $espece, EntityManagerInterface $entityManager): Response {
         if ($this->isCsrfTokenValid('delete'.$espece->getId(), $request->request->get('_token'))) {
             $entityManager->remove($espece);
             $entityManager->flush();

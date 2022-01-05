@@ -13,13 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/zone")
  */
-class ZoneController extends AbstractController
-{
+class ZoneController extends AbstractController {
     /**
      * @Route("/", name="zone_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): Response
-    {
+    public function index(EntityManagerInterface $entityManager): Response {
         $zones = $entityManager
             ->getRepository(Zone::class)
             ->findAll();
@@ -32,8 +30,7 @@ class ZoneController extends AbstractController
     /**
      * @Route("/new", name="zone_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(Request $request, EntityManagerInterface $entityManager): Response {
         $zone = new Zone();
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
@@ -54,8 +51,7 @@ class ZoneController extends AbstractController
     /**
      * @Route("/{id}", name="zone_show", methods={"GET"})
      */
-    public function show(Zone $zone): Response
-    {
+    public function show(Zone $zone): Response {
         return $this->render('zone/show.html.twig', [
             'zone' => $zone,
         ]);
@@ -64,8 +60,7 @@ class ZoneController extends AbstractController
     /**
      * @Route("/{id}/edit", name="zone_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Zone $zone, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(Request $request, Zone $zone, EntityManagerInterface $entityManager): Response {
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
 
@@ -84,8 +79,7 @@ class ZoneController extends AbstractController
     /**
      * @Route("/{id}", name="zone_delete", methods={"POST"})
      */
-    public function delete(Request $request, Zone $zone, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(Request $request, Zone $zone, EntityManagerInterface $entityManager): Response {
         if ($this->isCsrfTokenValid('delete'.$zone->getId(), $request->request->get('_token'))) {
             $entityManager->remove($zone);
             $entityManager->flush();

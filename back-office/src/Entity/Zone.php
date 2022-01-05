@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Zone
  *
  * @ORM\Table(name="zone")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ZoneRepository")
  */
-class Zone
-{
+class Zone implements \JsonSerializable {
     /**
      * @var int
      *
@@ -28,22 +27,28 @@ class Zone
      */
     private $zone;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getZone(): ?string
-    {
+    public function getZone(): ?string {
         return $this->zone;
     }
 
-    public function setZone(string $zone): self
-    {
+    public function setZone(string $zone): self {
         $this->zone = $zone;
 
         return $this;
     }
 
+    public function __toString(): string {
+        return $this->zone;
+    }
 
+    public function jsonSerialize(): array {
+        return array(
+            "id" => $this->id,
+            "zone" => $this->zone,
+        );
+    }
 }

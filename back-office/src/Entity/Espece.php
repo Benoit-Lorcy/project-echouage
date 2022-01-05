@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Espece
  *
  * @ORM\Table(name="espece")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\EspeceRepository")
  */
-class Espece
-{
+class Espece implements \JsonSerializable {
     /**
      * @var int
      *
@@ -28,22 +27,24 @@ class Espece
      */
     private $espece;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getEspece(): ?string
-    {
+    public function getEspece(): ?string {
         return $this->espece;
     }
 
-    public function setEspece(string $espece): self
-    {
+    public function setEspece(string $espece): self {
         $this->espece = $espece;
 
         return $this;
     }
 
-
+    public function jsonSerialize(): array {
+        return array(
+            "id" => $this->id,
+            "espece" => $this->espece,
+        );
+    }
 }

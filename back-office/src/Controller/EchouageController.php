@@ -13,13 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/echouage")
  */
-class EchouageController extends AbstractController
-{
+class EchouageController extends AbstractController {
     /**
      * @Route("/", name="echouage_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): Response
-    {
+    public function index(EntityManagerInterface $entityManager): Response {
         $echouages = $entityManager
             ->getRepository(Echouage::class)
             ->findAll();
@@ -32,8 +30,7 @@ class EchouageController extends AbstractController
     /**
      * @Route("/new", name="echouage_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(Request $request, EntityManagerInterface $entityManager): Response {
         $echouage = new Echouage();
         $form = $this->createForm(EchouageType::class, $echouage);
         $form->handleRequest($request);
@@ -54,8 +51,7 @@ class EchouageController extends AbstractController
     /**
      * @Route("/{id}", name="echouage_show", methods={"GET"})
      */
-    public function show(Echouage $echouage): Response
-    {
+    public function show(Echouage $echouage): Response {
         return $this->render('echouage/show.html.twig', [
             'echouage' => $echouage,
         ]);
@@ -64,8 +60,7 @@ class EchouageController extends AbstractController
     /**
      * @Route("/{id}/edit", name="echouage_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Echouage $echouage, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(Request $request, Echouage $echouage, EntityManagerInterface $entityManager): Response {
         $form = $this->createForm(EchouageType::class, $echouage);
         $form->handleRequest($request);
 
@@ -84,8 +79,7 @@ class EchouageController extends AbstractController
     /**
      * @Route("/{id}", name="echouage_delete", methods={"POST"})
      */
-    public function delete(Request $request, Echouage $echouage, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(Request $request, Echouage $echouage, EntityManagerInterface $entityManager): Response {
         if ($this->isCsrfTokenValid('delete'.$echouage->getId(), $request->request->get('_token'))) {
             $entityManager->remove($echouage);
             $entityManager->flush();

@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Echouage
  *
  * @ORM\Table(name="echouage", indexes={@ORM\Index(name="fk_zone_id", columns={"zone_id"}), @ORM\Index(name="fk_espace_id", columns={"espece_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\EchouageRepository")
  */
-class Echouage
-{
+class Echouage implements \JsonSerializable {
     /**
      * @var int
      *
@@ -55,58 +54,57 @@ class Echouage
      */
     private $espece;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getDate(): ?int
-    {
+    public function getDate(): ?int {
         return $this->date;
     }
 
-    public function setDate(int $date): self
-    {
+    public function setDate(int $date): self {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getNombre(): ?int
-    {
+    public function getNombre(): ?int {
         return $this->nombre;
     }
 
-    public function setNombre(int $nombre): self
-    {
+    public function setNombre(int $nombre): self {
         $this->nombre = $nombre;
 
         return $this;
     }
 
-    public function getZone(): ?Zone
-    {
+    public function getZone(): ?Zone {
         return $this->zone;
     }
 
-    public function setZone(?Zone $zone): self
-    {
+    public function setZone(?Zone $zone): self {
         $this->zone = $zone;
 
         return $this;
     }
 
-    public function getEspece(): ?Espece
-    {
+    public function getEspece(): ?Espece {
         return $this->espece;
     }
 
-    public function setEspece(?Espece $espece): self
-    {
+    public function setEspece(?Espece $espece): self {
         $this->espece = $espece;
 
         return $this;
     }
 
-
+    public function jsonSerialize(): array {
+        return array(
+            "id" => $this->id,
+            "date" => $this->date,
+            "nombre" => $this->nombre,
+            "zone" => $this->zone,
+            "espece" => $this->espece,
+        );
+    }
 }
