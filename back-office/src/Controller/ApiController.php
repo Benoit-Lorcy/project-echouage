@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\Echouage;
 
 /**
@@ -14,21 +16,121 @@ use App\Entity\Echouage;
  */
 class ApiController extends AbstractController {
     /**
-     * @Route("/echouages", name="get_all_echouages", methods={"GET"})
+     * @Route("/echouages", name="get_echouages", methods={"GET"})
      */
-    public function get_all_echoauges(): Response {
-        $em = $this->getDoctrine()->getManager();
-        $echouages = $em->getRepository(Echouage::Class)->findAll();
+    public function get_echoauges(Request $request): Response {
+        // Get all the possible parameters
+        $start  = $request->query->get("start");
+        $end    = $request->query->get("end");
+        $espece = $request->query->get("espece");
+        $zone   = $request->query->get("zone");
 
+        // If no parameters are passed, fetch all echouages
+        if (!$start && !$end && !$espece && !$zone) {
+            return $this->get_all_echoauges();
+        }
+
+        // If a parameter isn't a number, the request isn't valid
+        foreach (array($start, $end, $espece, $zone) as $param) {
+            if ($param && !is_numeric($param)) {
+                return $this->error(400, "All parameters should be a number");
+            }
+        }
+
+        $query = $this
+            ->getDoctrine()
+            ->getManager()
+            ->createQueryBuilder()
+            ->select("e")
+            ->from(Echouage::Class, "e");
+
+        try {
+            /* return $this->success(json_encode(array(intval($start), $end, $espece, $zone))); */
+            $query = $this->start_date($query, $start);
+            $query = $this->end_date($query, $end);
+            $query = $this->espece($query, $espece);
+            $query = $this->zone($query, $zone);
+
+            $echouages = $query->getQuery()->getResult();
+            return $this->success(json_encode($echouages));
+        } catch (Exception $e) {
+            return $this->error(500, $e->getMessage());
+        }
+
+        return $this->success(json_encode(array($start, $end, $espece, $zone)));
+    }
+
+    public function zone(QueryBuilder $query, ?string $zone): QueryBuilder {
+        if ($zone && is_numeric($zone)) {
+            return $query
+                ->andWhere("e.zone = :zone_id")
+                ->setParameter(":zone_id", intval($zone));
+        }
+
+        return $query;
+    }
+
+    public function espece(QueryBuilder $query, ?string $espece): QueryBuilder {
+        if ($espece && is_numeric($espece)) {
+            return $query
+                ->andWhere("e.espece = :espece_id")
+                ->setParameter(":espece_id", intval($espece));
+        }
+
+        return $query;
+    }
+
+    public function end_date(QueryBuilder $query, ?string $end): QueryBuilder {
+        if ($end && is_numeric($end)) {
+            return $query
+                ->andWhere("e.date <= :end")
+                ->setParameter(":end", intval($end));
+        }
+
+        return $query;
+    }
+
+    public function start_date(QueryBuilder $query, ?string $start): QueryBuilder {
+        if ($start && is_numeric($start)) {
+            return $query
+                ->andWhere("e.date >= :start")
+                ->setParameter(":start", intval($start));
+        }
+
+        return $query;
+    }
+
+    public function get_all_echoauges(): Response {
+        $echouages = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(Echouage::Class)
+            ->findAll();
+
+        return $this->success(json_encode($echouages));
+    }
+
+    public function success(string $data): Response {
         $response = new Response();
 
-        $response->setContent(json_encode($echouages));
+        $response->setContent($data);
+        $response->setStatusCode(200);
+
         $response->headers->set("Content-Type", "application/json");
         $response->headers->set("Access-Control-Allow-Origin", "*");
+
         return $response;
     }
 
-    public function filter_echouages(Request $request): Response {
-        
+    public function error(int $status_code, string $message): Response {
+        $response = new Response();
+
+        $response->setContent(json_encode(array("error" => $message)));
+        $response->setStatusCode($status_code);
+
+        $response->headers->set("Content-Type", "application/json");
+        $response->headers->set("Access-Control-Allow-Origin", "*");
+
+        return $response;
     }
 }
