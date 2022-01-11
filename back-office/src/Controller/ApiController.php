@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\Echouage;
+use App\Entity\Espece;
 
 /**
  * @Route("/api/v1", name="api_v1")
@@ -56,8 +57,29 @@ class ApiController extends AbstractController {
         } catch (Exception $e) {
             return $this->error(500, $e->getMessage());
         }
+    }
 
-        return $this->success(json_encode(array($start, $end, $espece, $zone)));
+    /**
+     * @Route("/especes", name="get_especes", methods={"GET"})
+     */
+    public function get_especes(Request $request): Response {
+        $search = $request->query->get("search");
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$search) {
+            $especes = $em->getRepository(Espece::Class)->findAll();
+            return $this->success(json_encode($especes));
+        }
+
+        $query = $em
+            ->createQueryBuilder()
+            ->select("e")
+            ->from(Espece::Class, "e")
+            ->where("LOWER(e.espece) LIKE :pattern")
+            ->setParameter("pattern", "%" . strtolower($search) . "%");
+
+        $especes = $query->getQuery()->getResult(); 
+        return $this->success(json_encode($especes));
     }
 
     public function zone(QueryBuilder $query, ?string $zone): QueryBuilder {
