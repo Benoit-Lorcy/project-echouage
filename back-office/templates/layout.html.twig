@@ -3,9 +3,19 @@
 <html>
     <head>
         <title>{% block title %}Echouage{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset("header.css") }}">
-        <link rel="stylesheet" href="{{ asset("footer.css") }}">
+
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="{{ asset("css/header.css") }}">
+        <link rel="stylesheet" href="{{ asset("css/footer.css") }}">
+        <link rel="stylesheet" href="{{ asset("css/style.css") }}">
         {% block stylesheets %}{% endblock %}
+
+        <!-- Roboto font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cherry+Swash&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+
+        <!-- JS -->
         {% block javascripts %}{% endblock %}
     </head>
     <body>
