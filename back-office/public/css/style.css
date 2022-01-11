@@ -1,0 +1,16 @@
+:root {
+  font-family: "Cherry Swash", cursive;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+main {
+  flex: 1;
+}

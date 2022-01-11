@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/zone")
+ * @Route("/back-office/zone")
  */
 class ZoneController extends AbstractController {
     /**

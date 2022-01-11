@@ -1,0 +1,11 @@
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#search {
+  width: 30%;
+  height: 50%;
+  background-color: black;
+}
