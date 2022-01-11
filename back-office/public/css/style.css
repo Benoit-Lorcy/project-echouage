@@ -1,6 +1,10 @@
 :root {
   font-family: "Cherry Swash", cursive;
   font-family: "Roboto", sans-serif;
+
+  --border-radius: 4px;
+  --primary-color: #1192AD;
+  --highlight-color: #1FB0CF;
 }
 
 body {

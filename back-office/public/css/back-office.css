@@ -2,10 +2,58 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: gray;
 }
 
 #search {
   width: 30%;
   height: 50%;
   background-color: black;
+  background-color: white;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#search label {
+  margin-top: 10%;
+}
+
+.field {
+  padding: 5px;
+  height: 10%;
+  width: 80%;
+  margin-top: 5px;
+  border: 0px;
+  border-radius: var(--border-radius);
+  background-color: #f2f2f2;
+}
+
+.field:focus-visible {
+  outline: 3px solid #1193ad52;
+}
+
+#search label {
+  align-self: flex-start;
+  line-height: 15px;
+  font-size: 14px;
+  margin: 10%;
+  margin-bottom: 1px;
+}
+
+#search input[type="submit"] {
+  font-size: 1.2rem;
+  color: white;
+  border: none;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  padding: 8px;
+  transition: background-color 300ms ease;
+  margin-top: auto;
+  margin-bottom: 5%;
+}
+
+#search input[type="submit"]:hover {
+  background-color: var(--highlight-color);
 }

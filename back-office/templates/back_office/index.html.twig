@@ -6,6 +6,14 @@
 
 {% block main %}
     <form id="search">
-        <input type="text" placeholder="hello" />
+        <label for="espece">Espèce</label>
+        <select name="espece" id="espece-select" class="field" type="text">
+        </select>
+        <label for="zone">Zone</label>
+        <select name="zone" id="zone-select" class="field" type="text" placeholder="hello">
+            <option value="all" selected>Toute</option>
+        </select>
+
+        <input type="submit" value="Rechercher" />
     </form>
 {% endblock %}

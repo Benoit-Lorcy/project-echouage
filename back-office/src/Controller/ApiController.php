@@ -76,7 +76,7 @@ class ApiController extends AbstractController {
             ->select("e")
             ->from(Espece::Class, "e")
             ->where("LOWER(e.espece) LIKE :pattern")
-            ->setParameter("pattern", "%" . strtolower($search) . "%");
+            ->setParameter("pattern", sprintf("%%%s%%", strtolower($search)));
 
         $especes = $query->getQuery()->getResult(); 
         return $this->success(json_encode($especes));
