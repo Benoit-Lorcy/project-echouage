@@ -1,3 +1,113 @@
-body{
-  background-image: url(./background.jpeg);
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-image: url(./background.jpg);
+    background-size: cover;
+    background-position: 50% 50%;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+form {
+    width: 860px;
+    margin: auto;
+    margin-top: 30px;
+    display: flex;
+    padding: 20px 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 15px 35px 0 rgb(0 0 0 / 10%);
+}
+
+.field{
+    padding: 0 15px;
+    height: 40px;
+    border: 0px;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 18px;
+    background-color: #f2f2f2;
+}
+
+.field:focus-visible{
+    /*border: 0px;*/
+    outline: 3px solid #1193ad52;
+}
+
+.date{
+    margin-right: 20px;
+    width: 100px;
+}
+
+.especegroup{
+    flex: auto;
+    margin-right: 20px;
+}
+
+.submit{
+    margin-top: 20px;
+    background-color: #1192AD;
+}
+
+.submit:hover{
+    background-color: #1FB0CF;
+    transition: all 200ms ease-out;
+    cursor: pointer;
+}
+
+.inputgroup{
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    line-height: 15px;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.autocomplete{
+    position: relative;
+    display: inline-block;
+}
+
+.autocompleteItems{
+    position: absolute;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px #0000001f;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    top: calc(100% + 4px);
+    z-index: 1;
+    
+}
+
+.autocompleteItem{
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: 200 ms all ease-out;
+}
+
+.autocompleteItem:hover{
+    background-color: #f2f2f2;
 }

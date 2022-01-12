@@ -15,14 +15,14 @@ username=$1
 password=$2
 
 if [ $3 = "create_user" ]; then
-  $db --user="root" --execute="\
+  sudo $db --user="root" --execute="\
     CREATE DATABASE $db_name; \
-    CREATE USER $username@'localhost' IDENTIFIED BY $password; \
-    GRANT ALL PRIVILEGES ON $db_name.* TO $username@'localhost'" \
+    CREATE USER '$username'@'localhost' IDENTIFIED BY '$password'; \
+    GRANT ALL PRIVILEGES ON '$db_name'.* TO $username@'localhost'" \
     -p
 fi
 
-$db --user=$username --password=$password --database=$db_name --execute="\
+sudo $db --user=$username --password=$password --database=$db_name --execute="\
   source echouage-structure.sql; \
   source echouage-data.sql; \
   source echouage-data.sql;"

@@ -1,9 +1,9 @@
-import { MyFrom } from './MyFrom.js';
+import MyForm from './MyForm.js';
 import './App.css';
 
 function App() {
   return (
-    <MyFrom />
+    <MyForm />
   );
 }
 
