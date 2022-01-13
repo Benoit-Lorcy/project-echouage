@@ -32,9 +32,9 @@ class ApiController extends AbstractController {
         }
 
         // If a parameter isn't a number, the request isn't valid
-        foreach (array($start, $end, $espece, $zone) as $param) {
+        foreach (array($start, $end, $zone) as $param) {
             if ($param && !is_numeric($param)) {
-                return $this->error(400, "All parameters should be a number");
+                return $this->error(400, "Start, end and zone must all parameters should be numbers");
             }
         }
 
@@ -46,10 +46,11 @@ class ApiController extends AbstractController {
             ->from(Echouage::Class, "e");
 
         try {
-            /* return $this->success(json_encode(array(intval($start), $end, $espece, $zone))); */
+            // return $this->success(json_encode(array($start, $end, $espece, $zone)));
             $query = $this->start_date($query, $start);
             $query = $this->end_date($query, $end);
-            $query = $this->espece($query, $espece);
+            // If espece parameter is a number, search espece by ID, otherwise search espece by name
+            $query = is_numeric($espece) ? $this->espece_by_id($query, $espece) : $this->espece_by_name($query, $espece);
             $query = $this->zone($query, $zone);
 
             $echouages = $query->getQuery()->getResult();
@@ -78,7 +79,7 @@ class ApiController extends AbstractController {
             ->where("LOWER(e.espece) LIKE :pattern")
             ->setParameter("pattern", sprintf("%%%s%%", strtolower($search)));
 
-        $especes = $query->getQuery()->getResult(); 
+        $especes = $query->getQuery()->getResult();
         return $this->success(json_encode($especes));
     }
 
@@ -92,14 +93,21 @@ class ApiController extends AbstractController {
         return $query;
     }
 
-    public function espece(QueryBuilder $query, ?string $espece): QueryBuilder {
-        if ($espece && is_numeric($espece)) {
+    public function espece_by_name(QueryBuilder $query, ?string $espece): QueryBuilder {
+        if ($espece) {
             return $query
-                ->andWhere("e.espece = :espece_id")
-                ->setParameter(":espece_id", intval($espece));
+                ->join("e.espece", "esp", "WITH", "e.espece = esp.id")
+                ->andWhere("LOWER(esp.espece) = :espece_name")
+                ->setParameter(":espece_name", strtolower($espece));
         }
 
         return $query;
+    }
+
+    public function espece_by_id(QueryBuilder $query, int $espece): QueryBuilder {
+        return $query
+            ->andWhere("e.espece = :espece_id")
+            ->setParameter(":espece_id", $espece);
     }
 
     public function end_date(QueryBuilder $query, ?string $end): QueryBuilder {
