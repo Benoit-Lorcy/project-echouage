@@ -5,7 +5,7 @@ function MyForm() {
     const [autocompleteList, setAutocompleteList] = useState([]);
     const [cursor, setCursor] = useState(0);
     const [submited, setSubmited] = useState(false);
-    /*
+
     useEffect(() => {
         const fetchEspece = async () => {
             //https://localhost:8000/api/v1/especes?search=dau
@@ -30,32 +30,9 @@ function MyForm() {
     useEffect(() => {
         console.log(form);
     }, [submited])
-    */
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-    }
-
-    const handleAutocomplete = (e) => {
-        const fetchEspece = async () => {
-            //https://localhost:8000/api/v1/especes?search=dau
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/especes?search=${form.espece}`);
-            const especes = await response.json();
-            await setAutocompleteList(especes);
-        }
-
-        setForm({ ...form, [e.target.name]: e.target.value });
-        setCursor(0);
-
-        /*if (autocompleteList[cursor] && form.espece === autocompleteList[cursor].espece) {
-            setAutocomplete(false);
-        } else */
-        if (e.target.value.length >= 3) {
-            fetchEspece();
-            setAutocomplete(true);
-        } else {
-            setAutocomplete(false);
-            setAutocompleteList([]);
-        }
     }
 
     const onKeyDown = (e) => {
@@ -104,7 +81,7 @@ function MyForm() {
             </div>
             <div className="inputgroup especegroup">
                 <label htmlFor="espece">Espèce</label>
-                <input onKeyDown={onKeyDown} className="field espece" name="espece" type="text" placeholder='crabs' onChange={handleAutocomplete} value={form.espece} />
+                <input onKeyDown={onKeyDown} className="field espece" name="espece" type="text" placeholder='crabs' onChange={handleChange} value={form.espece} />
                 {autocomplete && <div className='autocomplete' >
                     <div className='autocompleteItems' >
                         {autocompleteList.length > 0 ?

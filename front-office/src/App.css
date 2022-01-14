@@ -108,6 +108,10 @@ label{
     transition: 200 ms all ease-out;
 }
 
+.active{
+    background-color: #f2f2f2;
+}
+
 .autocompleteItem:hover{
     background-color: #f2f2f2;
 }
