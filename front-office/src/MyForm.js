@@ -5,40 +5,15 @@ function MyForm() {
     const [autocompleteList, setAutocompleteList] = useState([]);
     const [cursor, setCursor] = useState(0);
     const [submited, setSubmited] = useState(false);
-    /*
-    useEffect(() => {
-        const fetchEspece = async () => {
-            //https://localhost:8000/api/v1/especes?search=dau
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/especes?search=${form.espece}`);
-            const especes = await response.json();
-            await setAutocompleteList(especes);
-        }
 
-        setCursor(0);
-
-        if (autocompleteList[cursor] && form.espece === autocompleteList[cursor].espece) {
-            setAutocomplete(false);
-        } else if (form.espece.length >= 3) {
-            fetchEspece();
-            setAutocomplete(true);
-        } else {
-            setAutocomplete(false);
-            setAutocompleteList([]);
-        }
-    }, [form]);
-
-    useEffect(() => {
-        console.log(form);
-    }, [submited])
-    */
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
     const handleAutocomplete = (e) => {
-        const fetchEspece = async () => {
-            //https://localhost:8000/api/v1/especes?search=dau
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/especes?search=${form.espece}`);
+        const fetchEspece = async (espece) => {
+            //https://localhost:8000/api/v1/especes?search=ball
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/especes?search=${espece}`);
             const especes = await response.json();
             await setAutocompleteList(especes);
         }
@@ -46,11 +21,10 @@ function MyForm() {
         setForm({ ...form, [e.target.name]: e.target.value });
         setCursor(0);
 
-        /*if (autocompleteList[cursor] && form.espece === autocompleteList[cursor].espece) {
+        if (autocompleteList[cursor] && form.espece === autocompleteList[cursor].espece) {
             setAutocomplete(false);
-        } else */
-        if (e.target.value.length >= 3) {
-            fetchEspece();
+        } else if (e.target.value.length >= 3) {
+            fetchEspece(e.target.value);
             setAutocomplete(true);
         } else {
             setAutocomplete(false);
@@ -62,18 +36,18 @@ function MyForm() {
         if (e.keyCode === 40) {
             setCursor((cursor + 1) % autocompleteList.length);
         } else if (e.keyCode === 38) {
-            setCursor(cursor >= 0 ? cursor : cursor - 1);
+            setCursor(cursor === 0 ? cursor : cursor - 1);
         } else if (e.keyCode === 13) {
             e.preventDefault();
             setForm({ ...form, espece: autocompleteList[cursor].espece, id: autocompleteList[cursor].id });
-            setSubmited(!submited)
+            setAutocomplete(false);
         }
     }
 
     const handleSubmitButton = () => {
         if (autocompleteList[0]) {
             setForm({ ...form, espece: autocompleteList[0].espece, id: autocompleteList[0].id });
-            setSubmited(!submited)
+            setAutocomplete(false);
         } else {
             alert("aucun resultat")
         }
@@ -81,7 +55,7 @@ function MyForm() {
 
     const handleSearch = (e) => {
         setForm({ ...form, espece: e.target.dataset.name, id: Number(e.target.dataset.id) });
-        setSubmited(!submited)
+        setAutocomplete(false);
     }
 
     const onSubmit = (e) => { e.preventDefault(); };
