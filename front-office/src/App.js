@@ -12,8 +12,10 @@ function App() {
         //console.log(form);
         //requette echouage
         const response = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/v1/echouages?${form.start === 0 ? "" : "start=" + form.start + "&"
-            }${form.end === 0 ? "" : "end=" + form.end + "&"}${"espece=" + form.id
+            `${process.env.REACT_APP_API_URL}/api/v1/echouages?${
+                form.start === 0 ? "" : "start=" + form.start + "&"
+            }${form.end === 0 ? "" : "end=" + form.end + "&"}${
+                "espece=" + form.id
             }`
         );
 
@@ -22,8 +24,8 @@ function App() {
 
         //si le
         if (formatedData.data[0]) {
-            setGraph(true);
             setGraphData(formatedData);
+            setGraph(true);
         } else {
             alert("un problème est survenu");
             return;
