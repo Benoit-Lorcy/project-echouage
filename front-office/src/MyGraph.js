@@ -78,7 +78,13 @@ function MyGraph({ data }) {
             .attr("y", (d) => y(0))
             .attr("width", x1.bandwidth())
             .attr("height", (d) => height - y(0))
-            .attr("fill", (d) => color(d.zone));
+            .attr("fill", (d) => color(d.zone))
+            .on("mouseover", function (d) {
+                d3.select(this).style("fill", d3.rgb(color(d.rate)).darker(2));
+            })
+            .on("mouseout", function (d) {
+                d3.select(this).style("fill", color(d.rate));
+            });
 
         //petite animation trop kawai
         svg.selectAll("rect")
@@ -87,6 +93,30 @@ function MyGraph({ data }) {
             .duration(1000)
             .attr("y", (d) => y(d.nombre))
             .attr("height", (d) => height - y(d.nombre));
+
+        var legend = svg.selectAll(".legend")
+            .data(subgroups)
+            .join("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => ("translate(0," + i * 20 + ")"))
+            .style("opacity", "0");
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", function (d) { return color(d); });
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text((d) => d);
+
+        legend.transition().duration(500).delay(function (d, i) { return 1300 + 100 * i; }).style("opacity", "1");
+
+
 
         //console.log(data);
     }, [data]);
