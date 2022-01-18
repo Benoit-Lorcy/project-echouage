@@ -7,6 +7,7 @@ function MyGraph({ data }) {
     const margin = { top: 20, right: 20, bottom: 30, left: 40 },
         width = 1160 - margin.left - margin.right,
         height = 650 - margin.top - margin.bottom;
+    console.log("initialisation");
 
     useEffect(() => {
         if (data.length === 0) return;
@@ -59,7 +60,6 @@ function MyGraph({ data }) {
         svg.append("g").call(d3.axisLeft(y));
 
         //aled
-
         svg.append("g")
             .selectAll("g")
             // Enter in data = loop group per group
@@ -67,23 +67,24 @@ function MyGraph({ data }) {
             .join("g")
             .attr("transform", (d) => `translate(${x0(d.date)}, 0)`)
             .selectAll("rect")
-            //.data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
-            //console.log()
-            .data((d) => {
-                console.log(d);
-                return d.valeurs;
-            })
+            .data((d) => d.valeurs)
             .join("rect")
             .attr("x", (d) => x1(d.zone))
             .attr("y", (d) => y(0))
             .attr("width", x1.bandwidth())
             .attr("height", (d) => height - y(0))
             .attr("fill", (d) => color(d.zone))
-            .on("mouseover", function (d) {
-                d3.select(this).style("fill", d3.rgb(color(d.rate)).darker(2));
+            .on("mouseover", function (d, i) {
+                d3.select(this)
+                    .transition()
+                    .duration("50")
+                    .attr("opacity", ".85");
             })
-            .on("mouseout", function (d) {
-                d3.select(this).style("fill", color(d.rate));
+            .on("mouseout", function (d, i) {
+                d3.select(this)
+                    .transition()
+                    .duration("50")
+                    .attr("opacity", "1");
             });
 
         //petite animation trop kawai
@@ -94,29 +95,35 @@ function MyGraph({ data }) {
             .attr("y", (d) => y(d.nombre))
             .attr("height", (d) => height - y(d.nombre));
 
-        var legend = svg.selectAll(".legend")
+        //la légende en haut à gauche
+        var legend = svg
+            .selectAll(".legend")
             .data(subgroups)
             .join("g")
             .attr("class", "legend")
-            .attr("transform", (d, i) => ("translate(0," + i * 20 + ")"))
+            .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
             .style("opacity", "0");
 
-        legend.append("rect")
+        legend
+            .append("rect")
             .attr("x", width - 18)
             .attr("width", 18)
             .attr("height", 18)
-            .style("fill", function (d) { return color(d); });
+            .style("fill", (d) => color(d));
 
-        legend.append("text")
+        legend
+            .append("text")
             .attr("x", width - 24)
             .attr("y", 9)
             .attr("dy", ".35em")
             .style("text-anchor", "end")
             .text((d) => d);
 
-        legend.transition().duration(500).delay(function (d, i) { return 1300 + 100 * i; }).style("opacity", "1");
-
-
+        legend
+            .transition()
+            .duration(500)
+            .delay((d, i) => 1300 + 100 * i)
+            .style("opacity", "1");
 
         //console.log(data);
     }, [data]);
