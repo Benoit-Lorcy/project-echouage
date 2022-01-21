@@ -14,7 +14,7 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tmain>
         {% for echouage in echouages %}
             <tr>
                 <td>{{ echouage.id }}</td>
@@ -30,7 +30,7 @@
                 <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
-        </tbody>
+        </tmain>
     </table>
 
     <a href="{{ path('echouage_new') }}">Create new</a>

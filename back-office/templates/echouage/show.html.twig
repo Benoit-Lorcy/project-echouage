@@ -1,12 +1,12 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Echouage{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>Echouage</h1>
 
     <table class="table">
-        <tbody>
+        <tmain>
             <tr>
                 <th>Id</th>
                 <td>{{ echouage.id }}</td>
@@ -19,7 +19,7 @@
                 <th>Nombre</th>
                 <td>{{ echouage.nombre }}</td>
             </tr>
-        </tbody>
+        </tmain>
     </table>
 
     <a href="{{ path('echouage_index') }}">back to list</a>

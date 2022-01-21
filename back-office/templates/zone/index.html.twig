@@ -13,7 +13,7 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tmain>
         {% for zone in zones %}
             <tr>
                 <td>{{ zone.id }}</td>
@@ -28,7 +28,7 @@
                 <td colspan="3">no records found</td>
             </tr>
         {% endfor %}
-        </tbody>
+        </tmain>
     </table>
 
     <a href="{{ path('zone_new') }}">Create new</a>

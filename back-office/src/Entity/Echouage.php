@@ -107,4 +107,8 @@ class Echouage implements \JsonSerializable {
             "espece" => $this->espece,
         );
     }
+
+    public function __toString(): string {
+        return $this->nombre;
+    }
 }
