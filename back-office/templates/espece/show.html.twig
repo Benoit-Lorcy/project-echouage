@@ -1,12 +1,12 @@
-{% extends 'base.html.twig' %}
+{% extends "layout.html.twig" %}
 
 {% block title %}Espece{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>Espece</h1>
 
     <table class="table">
-        <tbody>
+        <tmain>
             <tr>
                 <th>Id</th>
                 <td>{{ espece.id }}</td>
@@ -15,7 +15,7 @@
                 <th>Espece</th>
                 <td>{{ espece.espece }}</td>
             </tr>
-        </tbody>
+        </tmain>
     </table>
 
     <a href="{{ path('espece_index') }}">back to list</a>

@@ -47,4 +47,8 @@ class Espece implements \JsonSerializable {
             "espece" => $this->espece,
         );
     }
+
+    public function __toString(): string {
+        return $this->espece;
+    }
 }

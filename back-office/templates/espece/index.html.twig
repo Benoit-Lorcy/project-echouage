@@ -13,7 +13,7 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tmain>
         {% for espece in especes %}
             <tr>
                 <td>{{ espece.id }}</td>
@@ -28,7 +28,7 @@
                 <td colspan="3">no records found</td>
             </tr>
         {% endfor %}
-        </tbody>
+        </tmain>
     </table>
 
     <a href="{{ path('espece_new') }}">Create new</a>

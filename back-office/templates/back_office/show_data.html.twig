@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Data{% endblock %}
+
+{% block main %}
+    <h1>Echouages pour {{ espece }}</h1>
+    <table>
+        <tbody>
+            <tr>
+                <th></th>
+                {% for zone in zones %}
+                    <th>{{ zone }}</td>
+                {% endfor %}
+            </tr>
+            {% for date, data in echouages %}
+                <tr>
+                    <th>{{ date }}</th>
+                    {% for zone in zones %}
+                        <td>{{ data[zone.getId()] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

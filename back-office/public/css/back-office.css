@@ -2,12 +2,12 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: gray;
+  background-image: url("../images/background.jpg");
 }
 
 #search {
-  width: 30%;
-  height: 50%;
+  width: 450px;
+  height: 45%;
   background-color: black;
   background-color: white;
   border-radius: var(--border-radius);
@@ -28,6 +28,10 @@ main {
   border: 0px;
   border-radius: var(--border-radius);
   background-color: #f2f2f2;
+}
+
+.field:focus {
+  outline: 3px solid #1193ad52;
 }
 
 .field:focus-visible {
