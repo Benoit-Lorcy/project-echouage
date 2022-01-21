@@ -9,6 +9,11 @@ function MyGraph({ data }) {
         height = 650 - margin.top - margin.bottom;
     console.log("initialisation");
 
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+
     useEffect(() => {
         if (data.length === 0) return;
         let svg = d3.select(svgRef.current);
@@ -75,16 +80,18 @@ function MyGraph({ data }) {
             .attr("height", (d) => height - y(0))
             .attr("fill", (d) => color(d.zone))
             .on("mouseover", function (d, i) {
-                d3.select(this)
-                    .transition()
-                    .duration("50")
-                    .attr("opacity", ".85");
+                //console.log(d)
+                tooltip.transition()
+                    .duration(50)
+                    .style("opacity", 1);
+                tooltip.html(i.nombre + " ")
+                    .style("left", (d.pageX) + "px")
+                    .style("top", (d.pageY - 28) + "px");
             })
-            .on("mouseout", function (d, i) {
-                d3.select(this)
-                    .transition()
-                    .duration("50")
-                    .attr("opacity", "1");
+            .on("mouseout", function (d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0);
             });
 
         //petite animation trop kawai

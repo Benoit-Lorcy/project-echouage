@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import * as d3 from "https://cdn.skypack.dev/d3@7";
 import "./App.css";
 
 function MyForm(props) {
@@ -6,11 +7,25 @@ function MyForm(props) {
     const [autocomplete, setAutocomplete] = useState(false);
     const [autocompleteList, setAutocompleteList] = useState([]);
     const [cursor, setCursor] = useState(0);
+    const [submit, setSubmit] = useState(false);
+    const formRef = useRef();
 
+    //mais ça veu dire qu'on attend qu'un autre state s'update pour envoyer la requette c'est un peu moche
+    //faudrai pas plus utiliser le meme state pour le submit?
+    //hummm
+    useEffect(() => {
+        if (submit) {
+            setSubmit(false);
+            handleSubmit();
+        }
+    }, [submit, form])
+
+    //handle change of the numbers inputs
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    //handle change on the text input
     const handleAutocomplete = (e) => {
         const fetchEspece = async (espece) => {
             //https://localhost:8000/api/v1/especes?search=ball
@@ -38,6 +53,7 @@ function MyForm(props) {
         }
     };
 
+    //handle search bar navigation
     const onKeyDown = (e) => {
         if (e.keyCode === 40) {
             setCursor((cursor + 1) % autocompleteList.length);
@@ -56,6 +72,7 @@ function MyForm(props) {
         }
     };
 
+    //handle submit  if button is cliked (first suggestion is taken)
     const handleSubmitButton = () => {
         if (!autocomplete) {
             //send
@@ -71,6 +88,7 @@ function MyForm(props) {
         }
     };
 
+    // when user click on a autocomplete suggestion
     const handleSearch = (e) => {
         setForm({
             ...form,
@@ -78,27 +96,37 @@ function MyForm(props) {
             id: Number(e.target.dataset.id),
         });
         setAutocomplete(false);
+        console.log("should submit");
+        setSubmit(true);
     };
 
+    // handle the form submit and call the prop to pass the form object
     const handleSubmit = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (form.espece === "" || form.id === "-1") {
             alert("aucun resultat");
         } else {
+            doAFlip();
             props.onFormSubmit(form);
         }
-
-        //console.log(form);
     };
 
-    /*const highlight = (name) => {
-        if (!name) return <span></span>;
-        let match = RegExp('(.*)(' + form.espece + ')(.*)', 'gi').exec(name);
-        return <span>{match[1]}<span style={{ fontWeight: "bold" }}>{match[2]}</span>{match[3]}</span >;
-    }*/
+    //logo research DO A FLIP
+    const doAFlip = (e) => {
+        d3.selectAll(".fa")
+            .transition()
+            .duration(5000)
+            .style("transform", rotTween);
+        function rotTween() {
+            var i = d3.interpolate(0, 360);
+            return function (t) {
+                return "rotate(" + i(t) + ")";
+            };
+        }
+    }
 
     return (
-        <form className="search" autoComplete="off" onSubmit={handleSubmit}>
+        <form ref={formRef} className="search" autoComplete="off" onSubmit={handleSubmit}>
             <div className="inputgroup">
                 <label htmlFor="start">Année début</label>
                 <input
