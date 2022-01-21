@@ -5,6 +5,12 @@
 {% block main %}
     <h1>Echouage</h1>
 
+    <a class="show" href="{{ path('echouage_index') }}">back to list</a>
+
+    <a class="show" href="{{ path('echouage_edit', {'id': echouage.id}) }}">edit</a>
+
+    {{ include('echouage/_delete_form.html.twig') }}
+
     <table class="table">
         <tmain>
             <tr>
@@ -21,10 +27,4 @@
             </tr>
         </tmain>
     </table>
-
-    <a href="{{ path('echouage_index') }}">back to list</a>
-
-    <a href="{{ path('echouage_edit', {'id': echouage.id}) }}">edit</a>
-
-    {{ include('echouage/_delete_form.html.twig') }}
 {% endblock %}

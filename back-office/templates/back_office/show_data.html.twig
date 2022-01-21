@@ -19,6 +19,10 @@
                         <td>{{ data[zone.getId()] }}</td>
                     {% endfor %}
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucun enregistrements</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
