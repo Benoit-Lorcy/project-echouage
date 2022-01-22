@@ -2,33 +2,33 @@ import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 function MyForm(props) {
-    //states
     const [form, setForm] = useState({ espece: "", start: 0, end: 0, id: -1 });
-
-    // Je pourrais regrouper les useStates suivant en object mais étant donné qu'il faut travailler avec des liste
-    // C'est très vite illisible
     const [autocomplete, setAutocomplete] = useState(false);
     const [autocompleteList, setAutocompleteList] = useState([]);
     const [cursor, setCursor] = useState(0);
     const [submit, setSubmit] = useState(false);
-
-    //permet d'avoir la référence de l'icone pour le faire tourner après
+    const formRef = useRef();
     const icon = useRef();
 
-    // Useffect qui permet de gérer le délai de react
-    // On l'utilise pour être sur que les donnés ont été mises à jour avant d'envoyer le form
+    //mais ça veu dire qu'on attend qu'un autre state s'update pour envoyer la requette c'est un peu moche
+    //faudrai pas plus utiliser le meme state pour le submit?
+    //hummm
     useEffect(() => {
         if (submit) {
             setSubmit(false);
             handleSubmit();
         }
-    }, [submit, form]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [submit, form]);
 
-    // Quand le form s'update :
-    useEffect(() => {
-        // Fonction qui permet de fetch la data
+    //handle change of the numbers inputs
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    //handle change on the text input
+    const handleAutocomplete = (e) => {
         const fetchEspece = async (espece) => {
-            // https://localhost:8000/api/v1/especes?search=ball
+            //https://localhost:8000/api/v1/especes?search=ball
             const response = await fetch(
                 `${process.env.REACT_APP_API_URL}/api/v1/especes?search=${espece}`
             );
@@ -36,109 +36,82 @@ function MyForm(props) {
             await setAutocompleteList(especes);
         };
 
-        // On met le cuseur de l'autocomplete à 0
+        setForm({ ...form, [e.target.name]: e.target.value });
         setCursor(0);
 
-        // Condition d'apparition / de disparition de l'autocomplete
         if (
             autocompleteList[cursor] &&
-            form.espece === autocompleteList[cursor].espece
+            e.target.value === autocompleteList[cursor].espece
         ) {
             setAutocomplete(false);
-        } else if (form.espece.length >= 3) {
-            fetchEspece(form.espece);
+        } else if (e.target.value.length >= 3) {
+            fetchEspece(e.target.value);
             setAutocomplete(true);
         } else {
             setAutocomplete(false);
             setAutocompleteList([]);
         }
-    }, [form]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // Handle l'écriture de tout les inputs du form
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // Récupère certaines touches utilisées dans l'input text
-    // Permet une navigation avec les flèches grâce au cuseur
-    const handleKeyDown = (e) => {
+    //handle search bar navigation
+    const onKeyDown = (e) => {
         if (e.keyCode === 40) {
             setCursor((cursor + 1) % autocompleteList.length);
         } else if (e.keyCode === 38) {
             setCursor(cursor === 0 ? cursor : cursor - 1);
         } else if (e.keyCode === 13) {
-            // Obligé de faire ça parceque l'action par default d'entré est form submit
-            e.preventDefault();
-            if (autocomplete && autocompleteList.length > 0) {
+            //obligé de faire ça parceque l'action par default d'entré est form submit
+            if (autocomplete) {
                 setForm({
                     ...form,
                     espece: autocompleteList[cursor].espece,
                     id: autocompleteList[cursor].id,
                 });
             }
-            setSubmit(true);
-        }
-    };
-
-    // Permet de submit avec le boutton
-    // La suggestion du curseur est envoyée
-    const handleSubmitButton = (e) => {
-        e.preventDefault();
-        if (!autocomplete) {
-            // Rien besoin de faire le bouton est déjà en submit :)
-            setSubmit(true);
-        } else if (autocompleteList[cursor]) {
-            setForm({
-                ...form,
-                espece: autocompleteList[cursor].espece,
-                id: autocompleteList[cursor].id,
-            });
             setAutocomplete(false);
         }
-        setSubmit(true);
     };
 
-    // When user click on a autocomplete suggestion
-    const handleAutocompleteClick = (e) => {
+    //handle submit  if button is cliked (first suggestion is taken)
+    const handleSubmitButton = () => {
+        if (!autocomplete) {
+            //send
+        } else if (autocompleteList[0]) {
+            setForm({
+                ...form,
+                espece: autocompleteList[0].espece,
+                id: autocompleteList[0].id,
+            });
+            setAutocomplete(false);
+        } else {
+            alert("aucun resultat");
+        }
+    };
+
+    // when user click on a autocomplete suggestion
+    const handleSearch = (e) => {
         setForm({
             ...form,
             espece: e.target.dataset.name,
             id: Number(e.target.dataset.id),
         });
-
-        // Obligé de faire ça sinon le curseur n'est pas à 0
-        // Et l'update du form réafiche la liste
-        // Je pourrais set le curseur là où on click mais c'est plus rapide comme ça
-        setAutocompleteList([
-            { espece: e.target.dataset.name, id: Number(e.target.dataset.id) },
-        ]);
         setAutocomplete(false);
+        console.log("should submit");
         setSubmit(true);
     };
 
-    // Handle the form submit and call the prop to pass the form object
+    // handle the form submit and call the prop to pass the form object
     const handleSubmit = (e) => {
         if (e) e.preventDefault();
-        //A suprimer (fait crasher volontairement react)
-        if (form.espece === "uwu") e.poufPlusDeSite();
-
-        if (autocompleteList.length === 0) {
-            alert("aucun résultat");
-            return;
-        } else if (
-            form.espece === "" ||
-            form.id === "-1" ||
-            autocompleteList[0].espece !== form.espece
-        ) {
-            alert("aucun résultat");
-            return;
+        if (form.espece === "" || form.id === "-1") {
+            alert("aucun resultat");
         } else {
             doAFlip();
             props.onFormSubmit(form);
         }
     };
 
-    // Le logo loupe effectue un salto avant :O
+    //logo research DO A FLIP omg
     const doAFlip = () => {
         icon.current.style.animation = "spin 1s linear";
         setTimeout(() => {
@@ -147,7 +120,12 @@ function MyForm(props) {
     };
 
     return (
-        <form className="search" autoComplete="off" onSubmit={handleSubmit}>
+        <form
+            ref={formRef}
+            className="search"
+            autoComplete="off"
+            onSubmit={handleSubmit}
+        >
             <div className="inputgroup">
                 <label htmlFor="start">Année début</label>
                 <input
@@ -175,12 +153,12 @@ function MyForm(props) {
             <div className="inputgroup especegroup">
                 <label htmlFor="espece">Espèce</label>
                 <input
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={onKeyDown}
                     className="field espece"
                     name="espece"
                     type="text"
-                    placeholder="Dauphin commun"
-                    onChange={handleChange}
+                    placeholder="crabs"
+                    onChange={handleAutocomplete}
                     value={form.espece}
                 />
                 {autocomplete && (
@@ -195,7 +173,7 @@ function MyForm(props) {
                                                 ? "autocompleteItem active"
                                                 : "autocompleteItem"
                                         }
-                                        onClick={handleAutocompleteClick}
+                                        onClick={handleSearch}
                                         data-name={elem.espece}
                                         data-id={elem.id}
                                     >
@@ -204,7 +182,7 @@ function MyForm(props) {
                                 ))
                             ) : (
                                 <div className="autocompleteItem">
-                                    Pas de résultat
+                                    No result
                                 </div>
                             )}
                         </div>
