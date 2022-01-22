@@ -36,9 +36,6 @@ function MyForm(props) {
             await setAutocompleteList(especes);
         };
 
-        // On met le cuseur de l'autocomplete à 0
-        setCursor(0);
-
         // Condition d'apparition / de disparition de l'autocomplete
         if (
             autocompleteList[cursor] &&
@@ -46,11 +43,12 @@ function MyForm(props) {
         ) {
             setAutocomplete(false);
         } else if (form.espece.length >= 3) {
+            // On met le cuseur de l'autocomplete à 0
+            setCursor(0);
             fetchEspece(form.espece);
             setAutocomplete(true);
         } else {
             setAutocomplete(false);
-            setAutocompleteList([]);
         }
     }, [form]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -123,17 +121,19 @@ function MyForm(props) {
         if (form.espece === "uwu") e.poufPlusDeSite();
 
         if (autocompleteList.length === 0) {
-            alert("aucun résultat");
+            alert("aucun résultat 1");
             return;
         } else if (
             form.espece === "" ||
             form.id === "-1" ||
-            autocompleteList[0].espece !== form.espece
+            autocompleteList[cursor].espece !== form.espece
         ) {
-            alert("aucun résultat");
+            console.log(autocompleteList);
+            alert("aucun résultat 2");
             return;
         } else {
             doAFlip();
+            //setCursor(0);
             props.onFormSubmit(form);
         }
     };
