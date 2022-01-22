@@ -5,6 +5,7 @@
 {% block main %}
     <h1>Zone index</h1>
 
+    <a class="create-new" href="{{ path('zone_new') }}">Create new</a>
     <table class="table">
         <thead>
             <tr>
@@ -30,6 +31,4 @@
         {% endfor %}
         </tmain>
     </table>
-
-    <a href="{{ path('zone_new') }}">Create new</a>
 {% endblock %}

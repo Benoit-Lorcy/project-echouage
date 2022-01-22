@@ -4,6 +4,7 @@
 
 {% block main %}
     <h1>Echouage index</h1>
+    <a class="create-new" href="{{ path('echouage_new') }}">Create new</a>
 
     <table class="table">
         <thead>
@@ -32,6 +33,4 @@
         {% endfor %}
         </tmain>
     </table>
-
-    <a href="{{ path('echouage_new') }}">Create new</a>
 {% endblock %}

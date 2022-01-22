@@ -7,7 +7,7 @@
 
     {{ include('espece/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('espece_index') }}">back to list</a>
+    <a class="back" href="{{ path('espece_index') }}">back to list</a>
 
     {{ include('espece/_delete_form.html.twig') }}
 {% endblock %}
