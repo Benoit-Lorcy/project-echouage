@@ -1,4 +1,11 @@
 <?php
+/**
+ * CRUD for the Echouage entity
+ * This file was auto-generated.
+ *
+ * @author Morgan Van Amerongen
+ * @version 1.0.0
+ */
 
 namespace App\Controller;
 

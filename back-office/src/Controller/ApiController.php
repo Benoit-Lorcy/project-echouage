@@ -1,4 +1,10 @@
 <?php
+/**
+ * Controller providing the API for accessing the data via HTTP
+ *
+ * @author Morgan Van Amerongen
+ * @version 1.0.0
+ */
 
 namespace App\Controller;
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Controller for the back-office. Controls access
+ * to the main page (AKA the search page) and the
+ * data page.
+ *
+ * @author Morgan Van Amerongen
+ * @version 1.0.0
+ */
 
 namespace App\Controller;
 
@@ -24,6 +32,7 @@ class BackOfficeController extends AbstractController {
         $espece_id = $request->query->get("espece");
         $zone_id = $request->query->get("zone");
 
+        // If no URL parameters were specified, render the search page
         if (!$zone_id && !$espece_id) {
             $especes = $em->getRepository(Espece::Class)->findAll();
             $zones = $em->getRepository(Zone::Class)->findAll();
@@ -38,6 +47,9 @@ class BackOfficeController extends AbstractController {
         $zone_id = intval($zone_id);
         $espece_id = intval($espece_id);
 
+        // Create the query to fetch the Echouages with the 
+        // wanted constraints (given via the parameters),
+        // grouped by date.
         $query = $em->createQueryBuilder()
             ->select("e.date, z.id, SUM(e.nombre)")
             ->from(Echouage::Class, "e")
@@ -56,28 +68,67 @@ class BackOfficeController extends AbstractController {
             ->getQuery()
             ->getResult();
 
-        $espece = $em->getRepository(Espece::Class)->findBy(["id" => $espece_id]);
-        $zones = $zone_id > 0
+        // Fetch the name of the wanted Espece
+        $espece = $em->getRepository(Espece::Class)->findOneBy(["id" => $espece_id]);
+        // Fetch one or all Zone
+        $zones = $zone_id >= 0
             ? $em->getRepository(Zone::Class)->findBy(["id" => $zone_id])
             : $em->getRepository(Zone::Class)->findAll();
 
-        $data = array();
+        // Parse the data so it's easier to show it as an HTML table
+        $echouage_data = array();
         foreach ($echouages as $res) {
-            if (!array_key_exists($res["date"], $data)) {
-                $data[$res["date"]] = array();
+            // If the date was never recorded, set echouage for all zones to 0
+            if (!array_key_exists($res["date"], $echouage_data)) {
+                $echouage_data[$res["date"]] = array();
 
                 foreach ($zones as $zone) {
-                    $data[$res["date"]][$zone->getId()] = 0;
+                    $echouage_data[$res["date"]][$zone->getId()] = 0;
                 }
             }
  
-            $data[$res["date"]][$res["id"]] = $res[1];
+            // Set the echouage of the current year and zone to the fetched echouage_data
+            $echouage_data[$res["date"]][$res["id"]] = $res[1];
+        }
+
+        // Compute the min, max and average Echouage by Zone
+        $summary_data = array();
+        $nb_data = 0;
+
+        foreach ($zones as $zone) {
+            $summary_data[$zone->getId()] = array("min" => INF, "max" => 0, "avg" => 0);
+        }
+
+        foreach ($echouage_data as $date => $data) {
+            foreach ($data as $zone_id => $nb) {
+                /*
+                if ($nb == 0) {
+                    continue;
+                }
+                */
+
+                if ($nb < $summary_data[$zone_id]["min"]) {
+                    $summary_data[$zone_id]["min"] = $nb;
+                }
+
+                if ($nb > $summary_data[$zone_id]["max"]) {
+                    $summary_data[$zone_id]["max"] = $nb;
+                }
+
+                $nb_data += 1;
+                $summary_data[$zone_id]["avg"] += $nb;
+            }
+        }
+
+        foreach ($zones as $zone) {
+            $summary_data[$zone->getId()]["avg"] = $nb_data;
         }
 
         return $this->render("back_office/show_data.html.twig", [
-            "espece" => $espece[0],
+            "espece" => $espece,
             "zones" => $zones,
-            "echouages" => $data,
+            "echouages" => $echouage_data,
+            "summary_data" => $summary_data,
         ]);
     }
 }
