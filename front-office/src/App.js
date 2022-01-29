@@ -2,7 +2,7 @@ import MyForm from "./MyForm.js";
 import MyGraph from "./MyGraph";
 import "./App.css";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 function App() {
     const [graph, setGraph] = useState(false);
@@ -12,13 +12,15 @@ function App() {
         //console.log(form);
         //requette echouage
         const response = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/v1/echouages?${form.start === 0 ? "" : "start=" + form.start + "&"
-            }${form.end === 0 ? "" : "end=" + form.end + "&"}${"espece=" + form.id
+            `${process.env.REACT_APP_API_URL}/api/v1/echouages?${
+                form.start === 0 ? "" : "start=" + form.start + "&"
+            }${form.end === 0 ? "" : "end=" + form.end + "&"}${
+                "espece=" + form.id
             }`
         );
 
         //formatage de la response
-        const formatedData = formatEchouage(await response.json());
+        const formatedData = formatEchouage(await response.json(), form.espece);
 
         //si le
         if (formatedData.data[0]) {
@@ -31,7 +33,7 @@ function App() {
     };
 
     //cette fonctionner n'est pas très optimisée mais elle est lisible ;)
-    const formatEchouage = (echouages) => {
+    const formatEchouage = (echouages, espece) => {
         //converti le json en liste d'objects {date:"",zone:"",nombre""}
         echouages = echouages.map((echouage) => ({
             date: echouage.date,
@@ -98,9 +100,14 @@ function App() {
             max: max,
             data: formatedData,
         });
-        return { dates: dates, zones: zones, max: max, data: formatedData };
+        return {
+            espece: espece,
+            dates: dates,
+            zones: zones,
+            max: max,
+            data: formatedData,
+        };
     };
-
 
     return (
         <div>
