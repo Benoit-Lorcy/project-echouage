@@ -6,3 +6,32 @@
 table {
   margin-bottom: auto;
 }
+
+button {
+  font-size: 1.2rem;
+  color: white;
+  border: none;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  padding: 8px;
+  transition: background-color 300ms ease;
+}
+
+button:hover {
+  background-color: var(--highlight-color);
+  cursor: pointer;
+}
+
+#info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-block: 50px;
+}
+
+#info > p {
+  margin: 0;
+  margin-bottom: 20px;
+}

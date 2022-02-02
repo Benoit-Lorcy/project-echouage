@@ -29,27 +29,33 @@ class BackOfficeController extends AbstractController {
     public function index(Request $request): Response {
         $em = $this->getDoctrine()->getManager();
 
-        $espece_id = $request->query->get("espece");
+        $especes = $em->getRepository(Espece::Class)->findAll();
+        $zones = $em->getRepository(Zone::Class)->findAll();
+
+        return $this->render("back_office/index.html.twig", [
+            "controller_name" => "BackOfficeController",
+            "especes" => $especes,
+            "zones" => $zones,
+        ]);
+    }
+
+    /**
+     * @Route("/show_data", name="show_data")
+     */
+    public function show_data(Request $request): Response {
+        $espece_id = intval($request->query->get("espece"));
         $zone_id = $request->query->get("zone");
+        $take_no_entry_into_account = $request->query->get("take_no_entry_into_account");
 
-        // If no URL parameters were specified, render the search page
-        if (!$zone_id && !$espece_id) {
-            $especes = $em->getRepository(Espece::Class)->findAll();
-            $zones = $em->getRepository(Zone::Class)->findAll();
-
-            return $this->render("back_office/index.html.twig", [
-                "controller_name" => "BackOfficeController",
-                "especes" => $especes,
-                "zones" => $zones,
-            ]);
+        if (!is_numeric($zone_id)) {
+            $zone_id = -1;
         }
-
-        $zone_id = intval($zone_id);
-        $espece_id = intval($espece_id);
 
         // Create the query to fetch the Echouages with the 
         // wanted constraints (given via the parameters),
         // grouped by date.
+        $em = $this->getDoctrine()->getManager();
+
         $query = $em->createQueryBuilder()
             ->select("e.date, z.id, SUM(e.nombre)")
             ->from(Echouage::Class, "e")
@@ -91,6 +97,7 @@ class BackOfficeController extends AbstractController {
             $echouage_data[$res["date"]][$res["id"]] = $res[1];
         }
 
+
         // Compute the min, max and average Echouage by Zone
         $summary_data = array();
         $nb_data = 0;
@@ -101,11 +108,9 @@ class BackOfficeController extends AbstractController {
 
         foreach ($echouage_data as $date => $data) {
             foreach ($data as $zone_id => $nb) {
-                /*
-                if ($nb == 0) {
+                if ($nb == 0 && !$take_no_entry_into_account) {
                     continue;
                 }
-                */
 
                 if ($nb < $summary_data[$zone_id]["min"]) {
                     $summary_data[$zone_id]["min"] = $nb;
@@ -121,7 +126,7 @@ class BackOfficeController extends AbstractController {
         }
 
         foreach ($zones as $zone) {
-            $summary_data[$zone->getId()]["avg"] = $nb_data;
+            $summary_data[$zone->getId()]["avg"] /= $nb_data;
         }
 
         return $this->render("back_office/show_data.html.twig", [
@@ -129,6 +134,7 @@ class BackOfficeController extends AbstractController {
             "zones" => $zones,
             "echouages" => $echouage_data,
             "summary_data" => $summary_data,
+            "take_no_entry_into_account" => $take_no_entry_into_account,
         ]);
     }
 }

@@ -55,8 +55,7 @@ class ApiController extends AbstractController {
             // return $this->success(json_encode(array($start, $end, $espece, $zone)));
             $query = $this->start_date($query, $start);
             $query = $this->end_date($query, $end);
-            // If espece parameter is a number, search espece by ID, otherwise search espece by name
-            $query = is_numeric($espece) ? $this->espece_by_id($query, $espece) : $this->espece_by_name($query, $espece);
+            $query = $this->espece($query, $espece);
             $query = $this->zone($query, $zone);
 
             $echouages = $query->getQuery()->getResult();
@@ -99,8 +98,16 @@ class ApiController extends AbstractController {
         return $query;
     }
 
-    public function espece_by_name(QueryBuilder $query, ?string $espece): QueryBuilder {
+    public function espece(QueryBuilder $query, ?string $espece): QueryBuilder {
         if ($espece) {
+            // Sort espece by ID
+            if (is_numeric($espece)) {
+                return $query
+                    ->andWhere("e.espece = :espece_id")
+                    ->setParameter(":espece_id", $espece);
+            }
+
+            // Sort espece by name
             return $query
                 ->join("e.espece", "esp", "WITH", "e.espece = esp.id")
                 ->andWhere("LOWER(esp.espece) = :espece_name")
@@ -108,12 +115,6 @@ class ApiController extends AbstractController {
         }
 
         return $query;
-    }
-
-    public function espece_by_id(QueryBuilder $query, int $espece): QueryBuilder {
-        return $query
-            ->andWhere("e.espece = :espece_id")
-            ->setParameter(":espece_id", $espece);
     }
 
     public function end_date(QueryBuilder $query, ?string $end): QueryBuilder {

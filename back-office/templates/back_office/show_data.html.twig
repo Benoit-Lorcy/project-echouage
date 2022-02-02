@@ -8,6 +8,33 @@
 
 {% block main %}
     <h1>Echouages pour {{ espece }}</h1>
+    <section id="info">
+        <p>
+            {{
+                take_no_entry_into_account 
+                    ? "Les années sans enregistrements sont notés \"---\" et ne sont pas prises en compte dans la moyenne et le minimum."
+                    : "Les années sans enregistrements sont prises en comptes comme un enregistrement de 0 echouage dans la moyenne et le minimum."
+            }}
+        </p>
+        <form>
+            {% if take_no_entry_into_account == false %}
+                <input name="take_no_entry_into_account" value="1" hidden>
+            {% else %}
+                <input name="take_no_entry_into_account" value="0" hidden>
+            {% endif %}
+
+            <input name="zone" value="{{ zones|length > 1 ? "all" : zones[0].getId() }}" hidden>
+            <input name="espece" value="{{ espece.getId() }}" hidden>
+
+            <button type="submit" id="">
+                {{
+                    take_no_entry_into_account
+                        ? "Ne pas prendre en compte les années sans enregistrements"
+                        : "Prendre en compte les années sans enregistrements"
+                }}
+            </button>
+        </form>
+    </section>
     <section id="tables">
         <table>
             <thead>
@@ -22,9 +49,15 @@
                 {% for date, data in echouages %}
                     <tr>
                         <th>{{ date }}</th>
-                        {% for zone in zones %}
-                            <td>{{ data[zone.getId()] }}</td>
-                        {% endfor %}
+                        {% if take_no_entry_into_account == false %}
+                            {% for zone in zones %}
+                                <td>{{ data[zone.getId()] == 0 ? "---" : data[zone.getId()] }}</td>
+                            {% endfor %}
+                        {% else %}
+                            {% for zone in zones %}
+                                <td>{{ data[zone.getId()] }}</td>
+                            {% endfor %}
+                        {% endif %}
                     </tr>
                 {% else %}
                     <tr>
@@ -47,9 +80,15 @@
                 {% for zone in zones %}
                     <tr>
                         <td>{{ zone }}</td>
-                        <td>{{ summary_data[zone.getId()]["min"] }}</td>
-                        <td>{{ summary_data[zone.getId()]["max"] }}</td>
-                        <td>{{ summary_data[zone.getId()]["avg"]|number_format(2, ",", " ") }}</td>
+                        {% if summary_data[zone.getId()]["avg"] == 0 and take_no_entry_into_account == false %}
+                            <td>---</td>
+                            <td>---</td>
+                            <td>---</td>
+                        {% else %}
+                            <td>{{ summary_data[zone.getId()]["min"] }}</td>
+                            <td>{{ summary_data[zone.getId()]["max"] }}</td>
+                            <td>{{ summary_data[zone.getId()]["avg"]|number_format(2, ",", " ") }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
