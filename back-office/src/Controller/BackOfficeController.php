@@ -125,8 +125,11 @@ class BackOfficeController extends AbstractController {
             }
         }
 
-        foreach ($zones as $zone) {
-            $summary_data[$zone->getId()]["avg"] /= $nb_data;
+        // Prevent division by 0
+        if ($nb_data > 0) {
+            foreach ($zones as $zone) {
+                $summary_data[$zone->getId()]["avg"] /= $nb_data;
+            }
         }
 
         return $this->render("back_office/show_data.html.twig", [
