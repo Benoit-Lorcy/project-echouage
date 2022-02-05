@@ -52,7 +52,7 @@ class ApiController extends AbstractController {
             ->from(Echouage::Class, "e");
 
         try {
-            // return $this->success(json_encode(array($start, $end, $espece, $zone)));
+            // Pass the QueryBuilder around to filter the query with the given parameters
             $query = $this->start_date($query, $start);
             $query = $this->end_date($query, $end);
             $query = $this->espece($query, $espece);
@@ -77,6 +77,7 @@ class ApiController extends AbstractController {
             return $this->success(json_encode($especes));
         }
 
+        // Filter the especes by name
         $query = $em
             ->createQueryBuilder()
             ->select("e")

@@ -10,9 +10,12 @@
 
 {% block main %}
     <form action="/back-office/show_data" id="search">
+        {% if error_message is not null %}
+            <script defer>alert("{{ error_message }}");</script>
+        {% endif %}
         <label for="espece">Espèce</label>
         <input type="text" list="espece-list" id="espece" class="field" autocomplete="off">
-        <datalist id="espece-list">
+        <datalist id="espece-list" class="espece-list">
             {% for espece in especes %}
                 <option data-value="{{ espece.id }}">{{ espece.espece }}</option>
             {% endfor %}

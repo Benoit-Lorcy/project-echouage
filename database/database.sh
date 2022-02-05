@@ -19,7 +19,7 @@ if [ $3 = "create_user" ]; then
     CREATE DATABASE $db_name; \
     CREATE USER '$username'@'localhost' IDENTIFIED BY '$password'; \
     GRANT ALL PRIVILEGES ON '$db_name'.* TO $username@'localhost'" \
-    -p
+    -p $MARIADB_ROOT_PASSWORD
 fi
 
 sudo $db --user=$username --password=$password --database=$db_name --execute="\

@@ -26,7 +26,7 @@ class BackOfficeController extends AbstractController {
     /**
      * @Route("/", name="back_office_index")
      */
-    public function index(Request $request): Response {
+    public function index(Request $request, ?string $error_message): Response {
         $em = $this->getDoctrine()->getManager();
 
         $especes = $em->getRepository(Espece::Class)->findAll();
@@ -36,6 +36,7 @@ class BackOfficeController extends AbstractController {
             "controller_name" => "BackOfficeController",
             "especes" => $especes,
             "zones" => $zones,
+            "error_message" => $error_message,
         ]);
     }
 
@@ -51,7 +52,7 @@ class BackOfficeController extends AbstractController {
             $zone_id = -1;
         }
 
-        // Create the query to fetch the Echouages with the 
+        // Create the query to fetch the Echouages with the
         // wanted constraints (given via the parameters),
         // grouped by date.
         $em = $this->getDoctrine()->getManager();
@@ -76,6 +77,16 @@ class BackOfficeController extends AbstractController {
 
         // Fetch the name of the wanted Espece
         $espece = $em->getRepository(Espece::Class)->findOneBy(["id" => $espece_id]);
+
+        // If the espece is null, an invalid ID has been submitted
+        // This error should only be emitted if the client has modified
+        // the client side form validation
+        if (!$espece) {
+            return $this->redirectToRoute("back-office-index", [
+                "error_message" => "ID de l'espèce invalide",
+            ]);
+        }
+
         // Fetch one or all Zone
         $zones = $zone_id >= 0
             ? $em->getRepository(Zone::Class)->findBy(["id" => $zone_id])
@@ -92,7 +103,7 @@ class BackOfficeController extends AbstractController {
                     $echouage_data[$res["date"]][$zone->getId()] = 0;
                 }
             }
- 
+
             // Set the echouage of the current year and zone to the fetched echouage_data
             $echouage_data[$res["date"]][$res["id"]] = $res[1];
         }

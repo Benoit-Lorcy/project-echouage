@@ -1,5 +1,13 @@
 document.getElementById("espece").addEventListener("input", e => {
   let input = e.target;
+  let datalist = document.querySelector(".espece-list");
+
+  if (input.value.length < 3) {
+    datalist.id = "";
+  } else {
+    datalist.id = "espece-list";
+  }
+
   let options = document.querySelectorAll(`#espece-list option`);
   let hidden_input = document.getElementById("espece-hidden");
 
