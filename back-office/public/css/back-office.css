@@ -33,6 +33,7 @@ main {
 input.field[type="text"] {
   padding: 0px;
   padding-left: 10px;
+  box-sizing: border-box;
 }
 
 .field:focus {

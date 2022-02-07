@@ -111,10 +111,14 @@ class BackOfficeController extends AbstractController {
 
         // Compute the min, max and average Echouage by Zone
         $summary_data = array();
-        $nb_data = 0;
 
         foreach ($zones as $zone) {
-            $summary_data[$zone->getId()] = array("min" => INF, "max" => 0, "avg" => 0);
+            $summary_data[$zone->getId()] = array(
+                "min" => INF,
+                "max" => 0,
+                "avg" => 0,
+                "nb_data" => 0
+            );
         }
 
         foreach ($echouage_data as $date => $data) {
@@ -131,15 +135,15 @@ class BackOfficeController extends AbstractController {
                     $summary_data[$zone_id]["max"] = $nb;
                 }
 
-                $nb_data += 1;
+                $summary_data[$zone_id]["nb_data"] += 1;
                 $summary_data[$zone_id]["avg"] += $nb;
             }
         }
 
         // Prevent division by 0
-        if ($nb_data > 0) {
-            foreach ($zones as $zone) {
-                $summary_data[$zone->getId()]["avg"] /= $nb_data;
+        foreach ($zones as $zone) {
+            if ($summary_data[$zone->getId()]["nb_data"] > 0) {
+                $summary_data[$zone->getId()]["avg"] /= $summary_data[$zone->getId()]["nb_data"];
             }
         }
 
