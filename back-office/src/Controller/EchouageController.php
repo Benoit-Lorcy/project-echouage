@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/back-office/echouage")
+ * @Route("/echouage")
  */
 class EchouageController extends AbstractController {
     /**
