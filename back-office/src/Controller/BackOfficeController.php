@@ -20,11 +20,18 @@ use App\Entity\Espece;
 use App\Entity\Echouage;
 
 /**
- * @Route("/back-office", name="back_office")
+ * @Route("/", name="back_office_")
  */
 class BackOfficeController extends AbstractController {
     /**
-     * @Route("/", name="back_office_index")
+     * @Route("/", name="root")
+     */
+    public function root_to_index(): Response {
+        return $this->redirectToRoute("back_office_index", [], 301);
+    }
+
+    /**
+     * @Route("/back-office", name="index")
      */
     public function index(Request $request, ?string $error_message): Response {
         $em = $this->getDoctrine()->getManager();
@@ -41,7 +48,7 @@ class BackOfficeController extends AbstractController {
     }
 
     /**
-     * @Route("/show_data", name="show_data")
+     * @Route("/back-office/show_data", name="show_data")
      */
     public function show_data(Request $request): Response {
         $espece_id = intval($request->query->get("espece"));
