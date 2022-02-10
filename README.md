@@ -89,6 +89,12 @@ La base de données utilisée n'a pas été modifée de celle donnée avec le su
 </table>
 
 ## Virtual Hosts
+### Enregistrements hosts
+Les enregistrements suivants sont nécessaire dans le fichier `/etc/hosts`
+```
+172.31.3.52 back.prj-frm-52
+172.31.3.52 front.prj-frm-52
+```
 ### Front-end
 Ce virtual  host sert juste de proxy vers l'application nodejs
 ```apache
@@ -143,18 +149,19 @@ Ce virtual  host sert juste de proxy vers l'application nodejs
 
 ### Back-end
 * `back.prj-frm-52/back-office` Page d'accueil du back-office
-* `back.prj-frm-52/back-office/echouage` Page d'accueil pour le CRUD de l'entité échouage
-    * `back.prj-frm-52/back-office/echouage/new` Création d'une nouvelle entité échouage
-    * `back.prj-frm-52/back-office/echouage/{echouage_id}` Aperçu d'une seule entité échouage
-    * `back.prj-frm-52/back-office/echouage/{echouage_id}/edit` Modification d'une entité échouage
-* `back.prj-frm-52/back-office/espece` Page d'accueil pour le CRUD de l'entité espèce
-    * `back.prj-frm-52/back-office/espece/new` Création d'une nouvelle entité espèce
-    * `back.prj-frm-52/back-office/espece/{espece_id}` Aperçu d'une seule entité espèce
-    * `back.prj-frm-52/back-office/espece/{espece_id}/edit` Modification d'une entité espèce
-* `back.prj-frm-52/back-office/zone` Page d'accueil pour le CRUD de l'entité zone
-    * `back.prj-frm-52/back-office/zone/new` Création d'une nouvelle entité zone
-    * `back.prj-frm-52/back-office/zone/{zone_id}` Aperçu d'une seule entité zone
-    * `back.prj-frm-52/back-office/zone/{zone_id}/edit` Modification d'une entité zone
+* `back.prj-frm-52/show_data?espece={espece_id}&zone={zone_id|"all"}` Affichage des données d'échouages sous forme de tableau
+* `back.prj-frm-52/echouage` Page d'accueil pour le CRUD de l'entité échouage
+    * `back.prj-frm-52/echouage/new` Création d'une nouvelle entité échouage
+    * `back.prj-frm-52/echouage/{echouage_id}` Aperçu d'une seule entité échouage
+    * `back.prj-frm-52/echouage/{echouage_id}/edit` Modification d'une entité échouage
+* `back.prj-frm-52/espece` Page d'accueil pour le CRUD de l'entité espèce
+    * `back.prj-frm-52/espece/new` Création d'une nouvelle entité espèce
+    * `back.prj-frm-52/espece/{espece_id}` Aperçu d'une seule entité espèce
+    * `back.prj-frm-52/espece/{espece_id}/edit` Modification d'une entité espèce
+* `back.prj-frm-52/zone` Page d'accueil pour le CRUD de l'entité zone
+    * `back.prj-frm-52/zone/new` Création d'une nouvelle entité zone
+    * `back.prj-frm-52/zone/{zone_id}` Aperçu d'une seule entité zone
+    * `back.prj-frm-52/zone/{zone_id}/edit` Modification d'une entité zone
 
 ## API
 

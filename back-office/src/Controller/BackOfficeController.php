@@ -47,6 +47,9 @@ class BackOfficeController extends AbstractController {
         $espece_id = intval($request->query->get("espece"));
         $zone_id = $request->query->get("zone");
         $take_no_entry_into_account = $request->query->get("take_no_entry_into_account");
+        if ($take_no_entry_into_account == null || !is_numeric($take_no_entry_inot_account)) {
+            $take_no_entry_into_account = 0;
+        }
 
         $em = $this->getDoctrine()->getManager();
 
