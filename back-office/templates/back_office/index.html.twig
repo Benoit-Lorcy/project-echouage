@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/back-office/show_data" id="search">
+    <form action="/show_data" id="search">
         {% if error_message is not null %}
             <script defer>alert("{{ error_message }}");</script>
         {% endif %}

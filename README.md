@@ -92,11 +92,49 @@ La base de données utilisée n'a pas été modifée de celle donnée avec le su
 ### Front-end
 Ce virtual  host sert juste de proxy vers l'application nodejs
 ```apache
+<VirtualHost *:80>
+        ServerName front.prj-frm-52
+        ServerAlias www.front.prj-frm-52
 
+        ProxyPass / http://localhost:3000/
+        ProxyPassReverse / http://localhost:3000/
+</VirtualHost>
 ```
 ### Back-end
 ```apache
+<VirtualHost *:80>
+        ServerName back.prj-frm-52
+        ServerAlias www.back.prj-frm-52
 
+        DocumentRoot /var/www/cir3-TP-symf4-TP/back-office/public
+
+        <Directory /var/www/cir3-TP-symf4-TP/back-office/public>
+                AllowOverride None
+                DirectoryIndex index.php
+
+                <IfModule mod_rewrite.c>
+                        RewriteEngine On
+
+                        RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
+                        RewriteRule .* - [E=BASE:%1]
+
+                        RewriteCond %{HTTP:Authorization} .+
+                        RewriteRule ^ - [E=HTTP_AUTHORIZATION:%0]
+
+                        RewriteCond %{ENV:REDIRECT_STATUS} =""
+                        RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+                        RewriteCond %{REQUEST_FILENAME} !-f
+                        RewriteRule ^ %{ENV:BASE}/index.php [L]
+                </IfModule>
+
+                <IfModule !mod_rewrite.c>
+                        <IfModule mod_alias.c>
+                                RedirectMatch 307 ^/$ /index.php/
+                        </IfModule>
+                </IfModule>
+        </Directory>
+</VirtualHost>
 ```
 ## URLs
 
