@@ -1,4 +1,5 @@
 # Project CIR3 Symfony & React
+Les sources sont disponibles sur GitHub : [https://github.com/Benoit-Lorcy/tp-framework](https://github.com/Benoit-Lorcy/tp-framework)
 
 ## Base de données
 La base de données utilisée n'a pas été modifée de celle donnée avec le sujet.
