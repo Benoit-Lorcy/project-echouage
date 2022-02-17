@@ -80,7 +80,7 @@ class ApiController extends AbstractController {
         // Filter the especes by name
         $query = $em
             ->createQueryBuilder()
-            ->select("e")Petit entrainement avec borgan 
+            ->select("e")
             ->from(Espece::Class, "e")
             ->where("LOWER(e.espece) LIKE :pattern")
             ->setParameter("pattern", sprintf("%%%s%%", strtolower($search)));
