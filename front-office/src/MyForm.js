@@ -121,19 +121,19 @@ function MyForm(props) {
         if (form.espece === "uwu") e.poufPlusDeSite();
 
         if (autocompleteList.length === 0) {
-            alert("aucun résultat 1");
+            alert("aucun résultat");
             return;
         } else if (
             form.espece === "" ||
             form.id === "-1" ||
             autocompleteList[cursor].espece !== form.espece
         ) {
-            console.log(autocompleteList);
-            alert("aucun résultat 2");
+            //console.log(autocompleteList);
+            alert("aucun résultat");
             return;
         } else {
             doAFlip();
-            //setCursor(0);
+            //permet de passer le form au parent c'est à dire à App
             props.onFormSubmit(form);
         }
     };
