@@ -90,7 +90,7 @@ La base de données utilisée n'a pas été modifée de celle donnée avec le su
 
 ## Virtual Hosts
 ### Enregistrements hosts
-Les enregistrements suivants sont nécessaire dans le fichier `/etc/hosts`
+Les enregistrements suivants sont nécessaires dans le fichier `/etc/hosts`
 ```
 172.31.3.52 back.prj-frm-52
 172.31.3.52 front.prj-frm-52

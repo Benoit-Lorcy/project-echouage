@@ -47,7 +47,7 @@ class BackOfficeController extends AbstractController {
         $espece_id = intval($request->query->get("espece"));
         $zone_id = $request->query->get("zone");
         $take_no_entry_into_account = $request->query->get("take_no_entry_into_account");
-        if ($take_no_entry_into_account == null || !is_numeric($take_no_entry_inot_account)) {
+        if ($take_no_entry_into_account == null || !is_numeric($take_no_entry_into_account)) {
             $take_no_entry_into_account = 0;
         }
 
@@ -117,8 +117,10 @@ class BackOfficeController extends AbstractController {
             );
         }
 
+        // Go through the data
         foreach ($echouage_data as $date => $data) {
             foreach ($data as $zone_id => $nb) {
+                // If there is no echouage, and the option is set, we don't take this entry into account
                 if ($nb == 0 && !$take_no_entry_into_account) {
                     continue;
                 }
@@ -136,6 +138,7 @@ class BackOfficeController extends AbstractController {
             }
         }
 
+        // Compute the sum of all echouages divided by the count of all echouages
         foreach ($zones as $zone) {
             // Prevent division by 0
             if ($summary_data[$zone->getId()]["nb_data"] > 0) {

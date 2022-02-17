@@ -61,7 +61,7 @@ class ApiController extends AbstractController {
             $echouages = $query->getQuery()->getResult();
             return $this->success(json_encode($echouages));
         } catch (Exception $e) {
-            return $this->error(500, $e->getMessage());
+            return $this->error(500, "Une erreur interne est survenue");
         }
     }
 
@@ -80,7 +80,7 @@ class ApiController extends AbstractController {
         // Filter the especes by name
         $query = $em
             ->createQueryBuilder()
-            ->select("e")
+            ->select("e")Petit entrainement avec borgan 
             ->from(Espece::Class, "e")
             ->where("LOWER(e.espece) LIKE :pattern")
             ->setParameter("pattern", sprintf("%%%s%%", strtolower($search)));
@@ -89,6 +89,7 @@ class ApiController extends AbstractController {
         return $this->success(json_encode($especes));
     }
 
+    // Sorty echouages by zone in a query
     public function zone(QueryBuilder $query, ?string $zone): QueryBuilder {
         if ($zone && is_numeric($zone)) {
             return $query
@@ -99,6 +100,7 @@ class ApiController extends AbstractController {
         return $query;
     }
 
+    // Sort echouages by espece ID or name in a query
     public function espece(QueryBuilder $query, ?string $espece): QueryBuilder {
         if ($espece) {
             // Sort espece by ID
@@ -118,6 +120,7 @@ class ApiController extends AbstractController {
         return $query;
     }
 
+    // Remove echouages newer than $end from a query
     public function end_date(QueryBuilder $query, ?string $end): QueryBuilder {
         if ($end && is_numeric($end)) {
             return $query
@@ -128,6 +131,7 @@ class ApiController extends AbstractController {
         return $query;
     }
 
+    // Remove echouages older than $start from a query
     public function start_date(QueryBuilder $query, ?string $start): QueryBuilder {
         if ($start && is_numeric($start)) {
             return $query
@@ -138,6 +142,7 @@ class ApiController extends AbstractController {
         return $query;
     }
 
+    // Fetch all echouages
     public function get_all_echoauges(): Response {
         $echouages = $this
             ->getDoctrine()
@@ -148,6 +153,7 @@ class ApiController extends AbstractController {
         return $this->success(json_encode($echouages));
     }
 
+    // Returns a 200 success with some json data
     public function success(string $data): Response {
         $response = new Response();
 
@@ -160,6 +166,7 @@ class ApiController extends AbstractController {
         return $response;
     }
 
+    // Returns an error with an error code and a message
     public function error(int $status_code, string $message): Response {
         $response = new Response();
 

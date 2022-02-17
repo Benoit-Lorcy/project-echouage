@@ -36,6 +36,7 @@ class EchouageRepository extends ServiceEntityRepository {
             ->where("e.espece = :espece_id")
             ->setParameter(":espece_id", $espece_id);
 
+        // If the zone id is set, sort by zone
         if ($zone_id) {
             $query = $query
                 ->andWhere("e.zone = :zone_id")
@@ -47,31 +48,4 @@ class EchouageRepository extends ServiceEntityRepository {
             ->getQuery()
             ->getResult();
     }
-
-    // /**
-    //  * @return Echouage[] Returns an array of Echouage objects
-    //  */
-    /*
-    public function findByExampleField($value) {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Echouage {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
