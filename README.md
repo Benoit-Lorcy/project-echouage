@@ -1,8 +1,23 @@
 # Project CIR3 Symfony & React
 Les sources sont disponibles sur GitHub : [https://github.com/Benoit-Lorcy/tp-framework](https://github.com/Benoit-Lorcy/tp-framework)
 
+## Tester le projet en local
+#### Back-office
+Dans le fichier `back-office`, faire `composer install` pour installer les dépendances, puis
+`symfony server:start -d` pour lancer le serveur Symfony en tâche de fond.
+
+#### Front-office
+Dans le fichier `front-office`, faire `npm install` pour installer les dépendances, puis
+`npm start` pour lancer le serveur NodeJS.
+
+Sans avoir changé les ports par défaut, le front-office sera accessible à [http://localhost:8000](http://localhost:8000)
+et le back-office à [http://localhost:3000](http://localhost:3000).
+
+**Attention**, l'URL que le front-office va utiliser pour accéder à l'API du back-end est
+spécifiée dans `front-office/.env` sous le nom `REACT_APP_API_URL`.
+
 ## Base de données
-La base de données utilisée n'a pas été modifée de celle donnée avec le sujet.
+La base de données utilisée n'a pas été modifiée de celle donnée avec le sujet.
 
 ### Tables
 <table>
