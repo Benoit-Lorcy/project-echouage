@@ -179,7 +179,7 @@ function MyForm(props) {
                     className="field espece"
                     name="espece"
                     type="text"
-                    placeholder="Dauphin commun"
+                    placeholder="Grand dauphin"
                     onChange={handleChange}
                     value={form.espece}
                 />

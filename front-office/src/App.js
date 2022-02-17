@@ -22,7 +22,7 @@ function App() {
         //formatage de la response
         const formatedData = formatEchouage(await response.json(), form.espece);
 
-        //si le
+        //si formated data n'est pas vide
         if (formatedData.data[0]) {
             setGraphData(formatedData);
             setGraph(true);
@@ -94,12 +94,13 @@ function App() {
             else formatedData.push(sumedData[i]);
         }
 
-        console.log({
+        /*console.log({
             dates: dates,
             zones: zones,
             max: max,
             data: formatedData,
-        });
+        });*/
+
         return {
             espece: espece,
             dates: dates,

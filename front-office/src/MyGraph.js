@@ -1,27 +1,38 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import * as d3 from "https://cdn.skypack.dev/d3@7";
+import * as d3 from "d3";
 
+//
 function MyGraph({ data }) {
+    //initialisation du container
     const svgContainerRef = React.useRef(null);
 
-    console.log(data.dates);
-
+    //reset la popup pour ne pas avoir de doublons
     d3.selectAll(".tooltip").remove();
+
+    //initilalise la popup qui permet de voir le nombre éxacte quand on passe sur une barres
     var tooltip = d3
         .select("body")
         .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+    //
+    let margin = { top: 20, right: 20, bottom: 30, left: 40 };
+    let width = 1160 - margin.left - margin.right;
+    let height = 650 - margin.top - margin.bottom;
+
+    //update du graph
     useEffect(() => {
+        //s'il n'y a pas de data, on ne fait rien
         if (data.length === 0) return;
-        d3.select(svgContainerRef.current).selectAll("svg").remove(); // Clear svg content before adding new elements
 
-        const margin = { top: 20, right: 20, bottom: 30, left: 40 },
-            width = 1160 - margin.left - margin.right,
-            height = 650 - margin.top - margin.bottom;
+        //nétoyage du svg
+        d3.select(svgContainerRef.current).selectAll("svg").remove();
 
+        //définition de la taille du graphique
+
+        //constates de data
         const groups = data.dates.sort();
         const subgroups = data.zones;
         const myData = data.data;
@@ -66,7 +77,7 @@ function MyGraph({ data }) {
         //ajout de l'axe y
         svg.append("g").call(d3.axisLeft(y));
 
-        //aled
+        //création des barres
         svg.append("g")
             .selectAll("g")
             // Enter in data = loop group per group
@@ -93,7 +104,7 @@ function MyGraph({ data }) {
                 tooltip.transition().duration(200).style("opacity", 0);
             });
 
-        //petite animation trop kawai
+        //animation des barres qui popent du bas
         svg.selectAll("rect")
             .transition()
             .delay((d) => Math.random() * 1000)
@@ -103,7 +114,7 @@ function MyGraph({ data }) {
 
         let shift = 0;
 
-        //la légende en haut à gauche
+        //création des éléments de la légende
         const legend = svg
             .selectAll(".legend")
             .data(subgroups)
@@ -126,6 +137,7 @@ function MyGraph({ data }) {
             .style("text-anchor", "start")
             .text((d) => d);
 
+        //réorganisation de la légend
         svg.selectAll(".legend")
             .attr("transform", (d, i, e) => {
                 let sent = shift;
@@ -140,13 +152,15 @@ function MyGraph({ data }) {
                 return "translate(" + (Number(x) + (width - shift) / 2) + ",0)";
             });
 
+        // animations de la légende
         legend
             .transition()
             .duration(500)
             .delay((d, i) => 1300 + 100 * i)
             .style("opacity", "1");
-    }, [data, tooltip]);
+    }, [data, tooltip, width, height]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    //affichage du titre et du graphique
     return (
         <div className="svgContainer" ref={svgContainerRef}>
             <h1 className="graphTitle">{`Echouages de ${

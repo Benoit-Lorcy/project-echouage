@@ -171,3 +171,14 @@ div.tooltip {
         opacity: 1;
     }
 }
+
+/*
+@media (max-width: 1160px) {
+    form {
+        width: 700px;
+    }
+
+    .svgContainer {
+        width: 700px;
+    }
+}*/
