@@ -89,8 +89,9 @@ La base de données utilisée n'a pas été modifée de celle donnée avec le su
 </table>
 
 ## Virtual Hosts
-### Enregistrements hosts
+### Serveur de production ISEN
 Les enregistrements suivants sont nécessaires dans le fichier `/etc/hosts`
+pour pouvoir accéder au site sur le serveur de production à l'ISEN.
 ```
 172.31.3.52 back.prj-frm-52
 172.31.3.52 front.prj-frm-52
@@ -143,6 +144,11 @@ Ce virtual  host sert juste de proxy vers l'application nodejs
 </VirtualHost>
 ```
 ## URLs
+
+### URLs alternatives
+Le site a aussi été mis en production aux URLs suivantes :
+* [https://back.prj-frm-cir3.vanamerongen.fr](https://back.prj-frm-cir3.vanamerongen.fr)
+* [https://front.prj-frm-cir3.vanamerongen.fr](https://front.prj-frm-cir3.vanamerongen.fr)
 
 ### Front-end
 * `front.prj-frm-52` Page d'accueil du front-end
