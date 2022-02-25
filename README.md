@@ -113,14 +113,13 @@ pour pouvoir accéder au site sur le serveur de production à l'ISEN.
 172.31.3.52 front.prj-frm-52
 ```
 ### Front-end
-Ce virtual  host sert juste de proxy vers l'application nodejs
+Ce virtual host renvois le build static gé��néré par `npm run build`
 ```apache
 <VirtualHost *:80>
         ServerName front.prj-frm-52
         ServerAlias www.front.prj-frm-52
 
-        ProxyPass / http://localhost:3000/
-        ProxyPassReverse / http://localhost:3000/
+	DocumentRoot /var/www/cir3-TP-symf4-TP/front-office/build
 </VirtualHost>
 ```
 ### Back-end
