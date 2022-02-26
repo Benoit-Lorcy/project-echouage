@@ -113,13 +113,13 @@ pour pouvoir accéder au site sur le serveur de production à l'ISEN.
 172.31.3.52 front.prj-frm-52
 ```
 ### Front-end
-Ce virtual host renvois le build static gé��néré par `npm run build`
+Ce virtual renvois le build statique généré par `npm run build`.
 ```apache
 <VirtualHost *:80>
         ServerName front.prj-frm-52
         ServerAlias www.front.prj-frm-52
 
-	DocumentRoot /var/www/cir3-TP-symf4-TP/front-office/build
+        DocumentRoot /var/www/cir3-TP-symf4-TP/front-office/build
 </VirtualHost>
 ```
 ### Back-end
