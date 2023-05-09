@@ -1,6 +1,6 @@
 # Project CIR3 Symfony & React
 
-####Contexte (ajout au readme)
+#### Contexte 
 Dans le cadre d’un projet de CIR3, nous avons dû créer un site comportant un front end et un back end. Le front end permet de rechercher dans une base de données le nombre d'échouages sur la côte par espèces et par années. Le back end permet de mettre à jour la base de données.
 
 ## Tester le projet en local
