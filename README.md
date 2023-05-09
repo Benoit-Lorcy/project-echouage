@@ -1,5 +1,7 @@
 # Project CIR3 Symfony & React
-Les sources sont disponibles sur GitHub : [https://github.com/Benoit-Lorcy/tp-framework](https://github.com/Benoit-Lorcy/tp-framework)
+
+####Contexte (ajout au readme)
+Dans le cadre d’un projet de CIR3, nous avons dû créer un site comportant un front end et un back end. Le front end permet de rechercher dans une base de données le nombre d'échouages sur la côte par espèces et par années. Le back end permet de mettre à jour la base de données.
 
 ## Tester le projet en local
 #### Back-office
